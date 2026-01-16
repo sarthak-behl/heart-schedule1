@@ -94,7 +94,7 @@ export default async function DashboardPage() {
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-gray-900">Your Messages</h2>
 
-            {messages.map((message) => (
+            {messages.map((message: any) => (
               <Card key={message.id} className="hover:shadow-md transition-shadow">
                 <CardHeader>
                   <div className="flex justify-between items-start">
