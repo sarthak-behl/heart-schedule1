@@ -1,6 +1,14 @@
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy-load Resend client to avoid build-time initialization
+let resendClient: Resend | null = null
+
+function getResendClient() {
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY)
+  }
+  return resendClient
+}
 
 interface SendScheduledEmailParams {
   to: string
@@ -83,6 +91,7 @@ This message was thoughtfully scheduled to arrive at the perfect time.
   `.trim()
 
   try {
+    const resend = getResendClient()
     const data = await resend.emails.send({
       from: `${process.env.FROM_NAME || "HeartSchedule"} <${process.env.FROM_EMAIL || "hello@heartschedule.app"}>`,
       to: toName ? `${toName} <${to}>` : to,
